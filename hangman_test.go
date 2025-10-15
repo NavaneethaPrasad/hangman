@@ -13,3 +13,11 @@ func TestSecretWordNoCapitals(t *testing.T) {
 	}
 
 }
+
+func TestSecretWordLength(t *testing.T) {
+	wordList := "/usr/share/dict/words"
+	secretWord := getSecretWord(wordList)
+	if len(secretWord) < 6 {
+		t.Errorf("Expected word length 6 or greater than 6, but got %q (length %d)", secretWord, len(secretWord))
+	}
+}
