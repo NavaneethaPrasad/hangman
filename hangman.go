@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"math/rand"
 	"os"
@@ -51,7 +52,23 @@ func getSecretWord(wordFileName string) string {
 	randomNum := rand.Intn(len(allowedWords))
 	return allowedWords[randomNum]
 }
+
+// func getUserInput() {
+
+// }
 func checkGuess(currentState Hangman, user_Input byte) Hangman {
+	isContainletter := strings.ContainsRune(currentState.secretWord, rune(user_Input))
+	isAlreadyGuessed := bytes.Contains(currentState.guesses, []byte{user_Input})
+
+	if currentState.chancesLeft > 1 && isContainletter && !isAlreadyGuessed {
+		currentState = Hangman{
+			secretWord:     currentState.secretWord,
+			guesses:        append(currentState.guesses, user_Input),
+			correctGuesses: append(currentState.correctGuesses, user_Input),
+			chancesLeft:    currentState.chancesLeft,
+		}
+
+	}
 	return currentState
 }
 
