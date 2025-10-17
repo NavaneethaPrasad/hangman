@@ -60,7 +60,7 @@ func checkGuess(currentState Hangman, user_Input byte) Hangman {
 	isContainletter := strings.ContainsRune(currentState.secretWord, rune(user_Input))
 	isAlreadyGuessed := bytes.Contains(currentState.guesses, []byte{user_Input})
 
-	if currentState.chancesLeft > 1 && isContainletter && !isAlreadyGuessed {
+	if currentState.chancesLeft > 0 && isContainletter && !isAlreadyGuessed {
 		currentState = Hangman{
 			secretWord:     currentState.secretWord,
 			guesses:        append(currentState.guesses, user_Input),
@@ -68,6 +68,14 @@ func checkGuess(currentState Hangman, user_Input byte) Hangman {
 			chancesLeft:    currentState.chancesLeft,
 		}
 
+	}
+	if currentState.chancesLeft > 0 && !isContainletter && !isAlreadyGuessed {
+		currentState = Hangman{
+			secretWord:     currentState.secretWord,
+			guesses:        append(currentState.guesses, user_Input),
+			correctGuesses: currentState.correctGuesses,
+			chancesLeft:    currentState.chancesLeft - 1,
+		}
 	}
 	return currentState
 }
