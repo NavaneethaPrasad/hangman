@@ -53,9 +53,6 @@ func getSecretWord(wordFileName string) string {
 	return allowedWords[randomNum]
 }
 
-// func getUserInput() {
-
-// }
 func checkGuess(currentState Hangman, user_Input byte) Hangman {
 	isContainletter := strings.ContainsRune(currentState.secretWord, rune(user_Input))
 	isAlreadyGuessed := bytes.Contains(currentState.guesses, []byte{user_Input})
@@ -78,6 +75,24 @@ func checkGuess(currentState Hangman, user_Input byte) Hangman {
 		}
 	}
 	return currentState
+}
+
+func getUserInput(s string) byte {
+	fmt.Print(s)
+	reader := bufio.NewReader(os.Stdin)
+	letter, _ := reader.ReadByte()
+	reader.ReadByte()
+	return letter
+
+}
+
+func checkWon(game Hangman) bool {
+	for _, ch := range game.secretWord {
+		if !bytes.Contains(game.correctGuesses, []byte{byte(ch)}) {
+			return false
+		}
+	}
+	return true
 }
 
 func main() {
