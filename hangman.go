@@ -110,5 +110,26 @@ func displayWord(state Hangman) string {
 }
 
 func main() {
-	fmt.Println(getSecretWord("/usr/share/dict/words"))
+	secretWord := getSecretWord("/usr/share/dict/words")
+	game := NewHangman(secretWord)
+
+	fmt.Println("Welcome to Hangman!")
+	fmt.Println("=========================================")
+
+	for game.chancesLeft > 0 {
+		fmt.Printf("\nWord: %s\n", displayWord(game))
+		fmt.Printf("Guessed letters: %s\n", string(game.guesses))
+		fmt.Printf("Chances left: %d\n", game.chancesLeft)
+
+		userGuess := getUserInput("Enter your guess: ")
+
+		game = checkGuess(game, userGuess)
+
+		if checkWon(game) {
+			fmt.Printf("\nYou won! The word was '%s'\n", game.secretWord)
+			return
+		}
+	}
+
+	fmt.Printf("\nGame over! The word was '%s'\n", game.secretWord)
 }
