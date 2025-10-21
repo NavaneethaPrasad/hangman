@@ -225,7 +225,49 @@ func TestDisplayWord(t *testing.T) {
 		guesses:        []byte{},
 		chancesLeft:    7,
 	}
-	expected := "_ _ _ _ _ _ _ _"
+	expected := "_ _ _ _ _ _ _ _ "
+	result := displayWord(state)
+	if result != expected {
+		t.Errorf("Expected %s, got %s", expected, result)
+	}
+}
+
+func TestDisplayWord2(t *testing.T) {
+	state := Hangman{
+		secretWord:     "elephant",
+		correctGuesses: []byte{'e', 'p'},
+		guesses:        []byte{'e', 'p'},
+		chancesLeft:    7,
+	}
+	expected := "e _ e p _ _ _ _ "
+	result := displayWord(state)
+	if result != expected {
+		t.Errorf("Expected %s, got %s", expected, result)
+	}
+}
+
+func TestDisplayWord3(t *testing.T) {
+	state := Hangman{
+		secretWord:     "elephant",
+		correctGuesses: []byte{'e', 'p', 'l', 'h', 'a', 't', 'n'},
+		guesses:        []byte{'e', 'p', 'l', 'h', 'a', 't', 'n'},
+		chancesLeft:    7,
+	}
+	expected := "e l e p h a n t "
+	result := displayWord(state)
+	if result != expected {
+		t.Errorf("Expected %s, got %s", expected, result)
+	}
+}
+
+func TestDisplayWord4(t *testing.T) {
+	state := Hangman{
+		secretWord:     "elephant",
+		correctGuesses: []byte{'e', 'p'},
+		guesses:        []byte{'e', 'p', 'x', 'y'},
+		chancesLeft:    5,
+	}
+	expected := "e _ e p _ _ _ _ "
 	result := displayWord(state)
 	if result != expected {
 		t.Errorf("Expected %s, got %s", expected, result)
