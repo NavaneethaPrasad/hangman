@@ -205,7 +205,6 @@ func TestCheckWon(t *testing.T) {
 		t.Errorf("Expected true but got false")
 	}
 }
-
 func TestCheckWon2(t *testing.T) {
 	state := Hangman{
 		secretWord:     "elephant",
@@ -214,6 +213,18 @@ func TestCheckWon2(t *testing.T) {
 		chancesLeft:    1,
 	}
 	if checkWon(state) {
+		t.Errorf("Expected false but got true")
+	}
+}
+
+func TestCheckLose(t *testing.T) {
+	state := Hangman{
+		secretWord:     "elephant",
+		correctGuesses: []byte{'e', 'l', 'p', 'h', 'a', 'n', 't'},
+		guesses:        []byte{'e', 'l', 'p', 'h', 'a', 'n', 't'},
+		chancesLeft:    7,
+	}
+	if checkLose(state) {
 		t.Errorf("Expected false but got true")
 	}
 }
