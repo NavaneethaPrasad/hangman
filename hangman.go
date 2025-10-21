@@ -57,7 +57,12 @@ func checkGuess(currentState Hangman, user_Input byte) Hangman {
 	isContainletter := strings.ContainsRune(currentState.secretWord, rune(user_Input))
 	isAlreadyGuessed := bytes.Contains(currentState.guesses, []byte{user_Input})
 
-	if currentState.chancesLeft > 0 && isContainletter && !isAlreadyGuessed {
+	if isAlreadyGuessed {
+		fmt.Printf("You already guessed '%c'!\n", user_Input)
+		return currentState
+	}
+
+	if currentState.chancesLeft > 0 && isContainletter {
 		currentState = Hangman{
 			secretWord:     currentState.secretWord,
 			guesses:        append(currentState.guesses, user_Input),
@@ -65,8 +70,7 @@ func checkGuess(currentState Hangman, user_Input byte) Hangman {
 			chancesLeft:    currentState.chancesLeft,
 		}
 
-	}
-	if currentState.chancesLeft > 0 && !isContainletter && !isAlreadyGuessed {
+	} else if currentState.chancesLeft > 0 && !isContainletter {
 		currentState = Hangman{
 			secretWord:     currentState.secretWord,
 			guesses:        append(currentState.guesses, user_Input),
@@ -78,12 +82,25 @@ func checkGuess(currentState Hangman, user_Input byte) Hangman {
 }
 
 func getUserInput(s string) byte {
-	fmt.Print(s)
 	reader := bufio.NewReader(os.Stdin)
-	letter, _ := reader.ReadByte()
-	reader.ReadByte()
-	return letter
+	for {
+		fmt.Print(s)
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
 
+		if len(input) != 1 {
+			fmt.Println("Please enter only a single letter")
+			continue
+		}
+
+		letter := rune(input[0])
+
+		if !unicode.IsLetter(letter) {
+			fmt.Println("Please enter a letter (A-Z or a-z)")
+			continue
+		}
+		return byte(unicode.ToLower(letter))
+	}
 }
 
 func checkWon(game Hangman) bool {
@@ -96,10 +113,7 @@ func checkWon(game Hangman) bool {
 }
 
 func checkLose(game Hangman) bool {
-	if game.chancesLeft <= 0 {
-		return true
-	}
-	return false
+	return game.chancesLeft <= 0
 }
 
 func displayWord(state Hangman) string {
@@ -137,6 +151,7 @@ func main() {
 			return
 		}
 	}
-
-	fmt.Printf("\nGame over! The word was '%s'\n", game.secretWord)
+	if checkLose(game) {
+		fmt.Printf("\nGame over! The word was '%s'\n", game.secretWord)
+	}
 }
