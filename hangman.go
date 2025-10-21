@@ -95,6 +95,13 @@ func checkWon(game Hangman) bool {
 	return true
 }
 
+func checkLose(game Hangman) bool {
+	if game.chancesLeft <= 0 {
+		return true
+	}
+	return false
+}
+
 func displayWord(state Hangman) string {
 	display := ""
 
